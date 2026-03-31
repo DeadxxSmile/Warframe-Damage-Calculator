@@ -1,0 +1,19 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# PyInstaller output
+build/
+dist/
+*.spec.bak
+
+# Inno Setup output
+installer_output/
+
+# Local virtual environments
+.venv/
+venv/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

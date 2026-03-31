@@ -1,0 +1,129 @@
+from __future__ import annotations
+
+import sqlite3
+from pathlib import Path
+from typing import List, Optional
+
+from .constants import DAMAGE_TYPES, SEARCH_LIMIT
+from .models import Mod, Weapon
+from .mod_parser import parse_effects
+
+
+class DatabaseSession:
+    def __init__(self, db_path: str | Path) -> None:
+        self.db_path = str(db_path)
+
+    def connect(self) -> sqlite3.Connection:
+        connection = sqlite3.connect(self.db_path)
+        connection.row_factory = sqlite3.Row
+        return connection
+
+
+class WeaponRepository(DatabaseSession):
+    def search_weapons(self, query: str, limit: int = SEARCH_LIMIT) -> List[str]:
+        query = query.strip()
+        sql = "SELECT weapon FROM weapons"
+        params: list[object] = []
+        if query:
+            sql += " WHERE weapon LIKE ?"
+            params.append(f"%{query}%")
+        sql += " ORDER BY weapon COLLATE NOCASE LIMIT ?"
+        params.append(limit)
+        with self.connect() as connection:
+            rows = connection.execute(sql, params).fetchall()
+        return [str(row["weapon"]) for row in rows]
+
+    def get_weapon(self, weapon_name: str) -> Optional[Weapon]:
+        with self.connect() as connection:
+            row = connection.execute("SELECT * FROM weapons WHERE weapon = ?", (weapon_name,)).fetchone()
+        if row is None:
+            return None
+
+        damage = {damage_type: float(row[damage_type.lower()]) for damage_type in DAMAGE_TYPES}
+        return Weapon(
+            weapon=str(row["weapon"]),
+            unique_name=str(row["unique_name"] or ""),
+            product_category=str(row["product_category"] or ""),
+            slot_group=str(row["slot_group"] or ""),
+            dmg=float(row["dmg"]),
+            critchan=float(row["critchan"]),
+            critmult=float(row["critmult"]),
+            statchan=float(row["statchan"]),
+            firerate=float(row["firerate"]),
+            multi=float(row["multi"]),
+            damage=damage,
+        )
+
+
+class ModRepository(DatabaseSession):
+    def search_mods(self, query: str, slot_group: str, limit: int = 100) -> List[Mod]:
+        query = query.strip()
+        params: list[object] = [slot_group]
+        sql = (
+            "SELECT * FROM mods WHERE supported = 1 AND (slot_group = ? OR slot_group = 'ANY')"
+        )
+        if query:
+            sql += " AND name LIKE ?"
+            params.append(f"%{query}%")
+        sql += " ORDER BY name COLLATE NOCASE LIMIT ?"
+        params.append(limit)
+        with self.connect() as connection:
+            rows = connection.execute(sql, params).fetchall()
+        return [self._row_to_mod(row) for row in rows]
+
+    def list_mods_for_slot(self, slot_group: str, limit: int = 250) -> List[Mod]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT * FROM mods WHERE supported = 1 AND (slot_group = ? OR slot_group = 'ANY') ORDER BY name COLLATE NOCASE LIMIT ?",
+                (slot_group, limit),
+            ).fetchall()
+        return [self._row_to_mod(row) for row in rows]
+
+    def get_mod(self, unique_name: str) -> Optional[Mod]:
+        with self.connect() as connection:
+            row = connection.execute("SELECT * FROM mods WHERE unique_name = ?", (unique_name,)).fetchone()
+        return self._row_to_mod(row) if row else None
+
+    def get_effects_for_rank(self, unique_name: str, rank: int):
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT effect_code, effect_value, effect_text, position FROM mod_effects WHERE unique_name = ? AND rank = ? ORDER BY position",
+                (unique_name, rank),
+            ).fetchall()
+        return [
+            parse_effects(row["effect_text"])[0] if False else None
+            for row in rows
+        ]
+
+    def fetch_ranked_effects(self, unique_name: str, rank: int):
+        from .models import ModEffect
+
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT effect_code, effect_value, effect_text, position FROM mod_effects WHERE unique_name = ? AND rank = ? ORDER BY position",
+                (unique_name, rank),
+            ).fetchall()
+        return [
+            ModEffect(
+                code=str(row["effect_code"]),
+                value=float(row["effect_value"]),
+                text=str(row["effect_text"]),
+                position=int(row["position"]),
+            )
+            for row in rows
+        ]
+
+    def _row_to_mod(self, row: sqlite3.Row) -> Mod:
+        return Mod(
+            unique_name=str(row["unique_name"]),
+            name=str(row["name"]),
+            mod_type=str(row["mod_type"] or ""),
+            compat_name=str(row["compat_name"] or ""),
+            polarity=str(row["polarity"] or ""),
+            rarity=str(row["rarity"] or ""),
+            fusion_limit=int(row["fusion_limit"] or 0),
+            base_drain=int(row["base_drain"] or 0),
+            description=str(row["description"] or ""),
+            effect_summary=str(row["effect_summary"] or ""),
+            supported=bool(row["supported"]),
+        )
