@@ -82,13 +82,12 @@ Typical build flow:
 build_exe.bat
 build_installer.bat
 ```
-# License
+
+## License
 
 Distributed under the GNU GPL-3.0 license; please check the `LICENSE` file in the GitHub repository for more information.
 
----
-
-# Disclaimer
+## Disclaimer
 
 The following is the disclaimer that applies to all scripts, functions, one-liners, etc. This disclaimer supersedes any disclaimer included in any script, function, one-liner, etc.
 
