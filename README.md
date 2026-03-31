@@ -2,7 +2,7 @@
 
 ## A Note on Development: This app's UI and structure were generated entirely using ChatGPT, but the underlying math is the result of countless hours of manual testing and coding.
 
-Ages ago, I started the TenZero.GG project to make a better site to create and share Warframe builds. While I handled the bulk of the overarching project, my collaborator Xadreus and I teamed up heavily on the incredibly complex damage calculations and the underlying Python for that math—which was his main focus. Together, we worked our tails off to accurately recreate the game's systems, matching not just the HUD stats, but the real-world values you actually see when using weapons in a mission. We honestly had the most accurate calculations of any model we could find online.
+Ages ago, I started the TenZero.GG project to make a better site to create and share Warframe builds. While I handled the bulk of the overarching project, my collaborator Xadreus and I teamed up heavily on the incredibly complex damage calculations and the underlying math. Together, we worked our tails off to accurately recreate the game's systems, matching not just the HUD stats, but the real-world values you actually see when using weapons in a mission. We honestly had the most accurate calculations of any model we could find online.
 
 Unfortunately, life loves to get in the way of passion projects. Between college for Xadreus and it being over a decade and a half since I last touched webdev, the site itself suffered. But our math and our testing spreadsheets were rock solid.
 
