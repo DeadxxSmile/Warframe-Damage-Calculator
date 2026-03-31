@@ -2,7 +2,7 @@ from __future__ import annotations
 
 APP_NAME = "WDC"
 APP_TITLE = "Warframe Damage Calculator by TenZeroGG"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 WINDOW_TITLE = f"{APP_TITLE} v{APP_VERSION}"
 
 DAMAGE_TYPES = [

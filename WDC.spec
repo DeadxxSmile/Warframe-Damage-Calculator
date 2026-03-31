@@ -15,6 +15,9 @@ icon_path = project_dir / "wdc.ico"
 if icon_path.exists():
     datas.append((str(icon_path), "."))
 
+if (project_dir / "LICENSE").exists():
+    datas.append((str(project_dir / "LICENSE"), "."))
+
 if (data_dir / "weapons.db").exists():
     datas.append((str(data_dir / "weapons.db"), "data"))
 

@@ -8,7 +8,7 @@ Unfortunately, life loves to get in the way of passion projects. Between college
 
 Instead of letting all the work Xadreus and I put into those accurate damage calculations go to waste, I figured: why not throw our spreadsheet at ChatGPT and see if I could vibe code out a Python app? I wanted to give something back to the amazing Warframe community so our work actually means something, even if the original site never gets built. I absolutely plan to get my hands dirty in the code later to add features and make it look better, but with real life pulling me away, using AI was the best way to get this tool into your hands now. I hope you understand, and I hope you enjoy it!
 
-# Warframe Damage Calculator by TenZeroGG v1.0.0
+# Warframe Damage Calculator by TenZeroGG v1.0.1
 
 Desktop Warframe damage calculator built around the calculator engine and packaged as a PyQt6 desktop app.
 

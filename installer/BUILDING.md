@@ -1,4 +1,4 @@
-# Building Warframe Damage Calculator by TenZeroGG v1.0.0
+# Building Warframe Damage Calculator by TenZeroGG v1.0.1
 
 This project includes the files needed to build a Windows executable with PyInstaller and a Windows installer with Inno Setup.
 

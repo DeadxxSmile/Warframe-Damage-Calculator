@@ -3,7 +3,7 @@
 
 #define MyAppName "Warframe Damage Calculator by TenZeroGG"
 #define MyAppShortName "WDC"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "TenZeroGG"
 #define MyAppExeName "WDC.exe"
 #define MyAppSourceDir "..\\dist\\WDC"
@@ -28,6 +28,7 @@ OutputBaseFilename=WDC-Setup-v{#MyAppVersion}
 ArchitecturesInstallIn64BitMode=x64compatible
 PrivilegesRequired=lowest
 SetupIconFile={#MySetupIcon}
+LicenseFile=..\LICENSE
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -37,6 +38,7 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription:
 
 [Files]
 Source: "{#MyAppSourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppShortName}"; Filename: "{app}\{#MyAppExeName}"
